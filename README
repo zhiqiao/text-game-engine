@@ -1,0 +1,46 @@
+This is a game engine for the purpose of playing text-based games.
+
+Supported Verb Types:
+  Move [on the map]
+  Use [object]
+  Add [object]
+  Drop [object]
+  Inspect [room state]
+
+Complex Objects
+- Must implement DebugInfo
+- List:
+  GameMap
+  GameRoom
+  RoomStateMapper
+  
+Simple Objects
+- Must implement __str__
+- List:
+  GameObject
+  RoomState
+
+
+Design Decisions:
+- The game map is represented as a two-dimensional list with the origin [i.e.
+  (0, 0)] located at the top left.  Coordinates are represented as (Y, X) where
+  Y is the vertical distance from the origin and X is the horizontal.
+  The reason for this decision was mostly for sanity so that I could easily
+  visualize the data-structure underlying the game.
+
+- Interactions with the rooms in the game are handled with states.  Each room
+  has a state at any given time.  Using objects changes the state of a room
+  from one state to another.  This means the universe of room states must
+  contain the power set of individual attributes.  E.g. In order to have two
+  possible scenarios involving if a room is on fire or has power, a room must
+  be able to represent the following states:
+    (1) No fire, power
+    (2) Fire, power
+    (3) No fire, no power
+    (4) Fire, no power
+  The reasoning for this was to create as much flexibility as possible for the
+  configuration of the game as possible.  Each room can be marked with an
+  initial game state (or be chosen randomly).  Each object a player can use to
+  interact with a room can be implemented as a map between possible states,
+  e.g. from above, a "Fire Extinguisher" can transition a room from state 2 to
+  state 1 and from state 4 to state 1, but has no effect on states 1 and 3.
