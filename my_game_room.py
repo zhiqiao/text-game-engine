@@ -1,4 +1,4 @@
-class RoomState(self):
+class RoomState(object):
     """Object to abstract out concept of a room's state."""
 
     def __init__(self):
@@ -22,10 +22,7 @@ class RoomState(self):
         self._desc = d
 
     def __str__(self):
-        return "ID: %s (%d)" % (self.desc, self.sid)
-
-    def PrintDebug(self):
-        
+        return str(self.sid)
 
 
 class RoomStateMapper(object):
@@ -36,7 +33,11 @@ class RoomStateMapper(object):
     """
 
     def __init__(self):
-        self._sid_to_state = {}
+        self._all_states = {}
+
+    @property
+    def all_states(self):
+        return self._all_states
 
     def AddState(self, sid, desc):
         """Add or potentially override an existing room state description.
@@ -45,7 +46,7 @@ class RoomStateMapper(object):
           sid:  Integer room state ID.
           desc:  String description.
         """
-        self._sid_to_state[sid] = desc
+        self._all_states[sid] = desc
 
     def GetState(self, sid):
         """Returns the description of the game state.
@@ -57,7 +58,7 @@ class RoomStateMapper(object):
           A string description of the room state, None if the ID does not exist
           in the mapping.
         """
-        return self._sid_to_state.get(sid, None)
+        return self._all_states.get(sid, None)
 
 
 class GameRoom(object):
@@ -66,7 +67,10 @@ class GameRoom(object):
     def __init__(self):
         # A state class must implement a __str__ method for debugging.
         self._state = None
+        # Contents are kept sorted.
         # Every content class must implement a __str__ method for debugging.
+        # Every content class must implement an sort_id method to be able to
+        # order these objects.
         self._contents = []
     
     @property
@@ -82,24 +86,63 @@ class GameRoom(object):
         return self._contents
 
     def AddContent(self, c):
-        self.contents.append(c)
+        """Add content to this room.
 
-    def ChangeState(self, game_object):
-        """Attempt to apply a game object to the state of the room.
-
-        Check if the game object can affect the state of the room.  If it can,
-        change the state of this room.  Otherwise, do nothing.
+        Takes ownership of the object.
 
         Args:
-          game_object:  A my_game_object.GameObject object.
+          c:  Name of an object to put into the room.
+
+        Raises:
+          Attribute error if sort_id is undefined.
+        """
+        self._contents.append(c)
+        self._contents.sort()
+
+    def RemoveContent(self, content_name):
+        """Remove content object from the room.
+
+        Args:
+          content_name: Name of the object to be removed from the room.
 
         Returns:
-          True if the game_object can affect the state of the room, False
-          otherwise.
+          The object if found, None otherwise.
         """
-        curr_state = self.state
-        self.state = game_object.UseObject(self.state)
-        return curr_state != self.state
+        for i, c in enumerate(self._contents):
+            if c == content_name:
+                break
+        if i == len(self._contents)-1 and c != content_name:
+            return None
+        # Removing an object from a sorted list should still preserve the sorted
+        # order of the list.
+        return self._contents.pop(i)
+
+    def GetContentsDisplay(self):
+        """Get the contents of the room to display.
+
+        Returns:
+           A list of strings of the form "NxNAME" where N is the number of that
+           object in the room.  [] if there are no objects in the room.
+        """
+        output = []
+        curr = None
+        count = 0
+        # The reason for this algorithm for counting objects, with assuming they
+        # are sorted, as opposed to using a dict, is because the results should
+        # be sorted by name of object, which would be difficult to do after
+        # flattening a dict.
+        for c in self.contents:
+            if curr is None:
+                curr = c
+            if c != curr:
+                output.append("%dx%s" % (count, curr))
+                curr = c
+                count = 1
+            else:
+                count += 1
+        if count:
+            output.append("%dx%s" % (count, c))
+        return output
 
     def __str__(self):
         return self.state.sid
@@ -107,6 +150,5 @@ class GameRoom(object):
     def DebugInfo(self):
         """Returns a list of debug info."""
         return ["STATE: %s" % str(self.state),
-                "CONTENTS: [%s]" % ", ".join(
-                [str(c) for c in self.contents])
+                "CONTENTS: [%s]" % ", ".join(self.GetContentsDisplay())
                ]

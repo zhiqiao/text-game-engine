@@ -2,7 +2,7 @@ class ObjectMapper(object):
     """Class to maintain all possible game objects.
 
     This class, when instantiated, acts like a datastore mapping between a game
-    object ID and a game object.
+    object name and a copy of that game object.
     """
     pass
 
@@ -18,17 +18,16 @@ class GameObject(object):
     """
 
     def __init__(self):
-        self._oid = None
         self._name = None
         self._state_changes = {}
+        self.reusable = True
+
+    def __eq__(self, o):
+        return self._name == o.name
 
     @property
-    def oid(self):
-        return self._oid
-
-    @oid.setter
-    def oid(self, i):
-        self._oid = i
+    def sort_id(self):
+        return self._name
 
     @property
     def name(self):
@@ -37,6 +36,26 @@ class GameObject(object):
     @name.setter
     def name(self, n):
         self._name = n
+
+    @property
+    def reusable(self):
+        return self._reusable
+
+    @reusable.setter
+    def reusable(self, n):
+        self._reusable = n
+
+    def AddStateChange(self, old_state, new_state):
+        """Add or update ability to change a room from old_state to new_state.
+
+        Args:
+          old_state:  Integer ID for room state.
+          new_state:  Integer ID for room state.
+        """
+        self._state_changes[old_state] = new_state
+
+    def __str__(self):
+        return self._name
 
     def UseObject(self, curr_state):
         """Attempt to use this object affect the given state.

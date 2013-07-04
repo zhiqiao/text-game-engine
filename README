@@ -44,3 +44,12 @@ Design Decisions:
   interact with a room can be implemented as a map between possible states,
   e.g. from above, a "Fire Extinguisher" can transition a room from state 2 to
   state 1 and from state 4 to state 1, but has no effect on states 1 and 3.
+
+- Logging
+  Log all output.
+
+- Exceptions vs. Errors
+  Fundamental game concepts (set up, building game state, parsing config file)
+  should all result in non-recoverable exceptions.
+  Game play which results in exceptions or error states should be logged as
+  such, but as much as possible, the game should not crash.

@@ -1,4 +1,3 @@
-
 class GameMap(object):
     """Object representing game map state.
 
@@ -16,9 +15,9 @@ class GameMap(object):
     """
 
     def __init__(self):
-        self._game_map = []
-        self._height = 0
-        self._width = 0
+        self._game_map = None
+        self._height = None
+        self._width = None
 
     @property
     def game_map(self):
@@ -30,6 +29,7 @@ class GameMap(object):
 
     @height.setter
     def height(self, h):
+        assert h > 0
         self._height = h
 
     @property
@@ -38,28 +38,65 @@ class GameMap(object):
     
     @width.setter
     def width(self, w):
+        assert w > 0
         self._width = w
 
     def Initialize(self):
-        """Initialize the game map to just the empty dimensions."""
+        """Initialize an empty game map with the current dimensions.
+
+        Raises:
+          AssertionError if the dimensions have not been set.
+        """
+        assert self.height and self.width
+        self._game_map = []
         for h in range(self.height):
             self.game_map.append([None] * self.width)
 
     def SetRoom(self, y, x, contents):
         """Define the contents of a room.
 
-        Contects to place at the coordinate must at least implement the
+        Contents to place at the coordinate must at least implement the
         following:
           __str__
 
         Args:
           y:  Y-coordinate of the room to set.
           x:  X-coordinate of the room to set.
-          contents:  Object to place at (y, x).
+          contents:  Object to place at (y, x).  Should be of type
+            my_game_room.GameRoom.
+
+        Returns:
+          Object set at coordinate on map.
+
+        Raises:
+          AssertionError if you try to set a value which is outside the
+            dimensions of the map.
         """
-        self.game_map[h][w] = contents
+        assert y >= 0 and y < self.height
+        assert x >= 0 and x < self.width
+        self.game_map[y][x] = contents
+        return self.game_map[y][x]
+
+    def GetRoom(self, y, x):
+        """Get object at location.
+
+        Args:
+          y:  Y-coordinate of the room to set.
+          x:  X-coordinate of the room to set.
+
+        Returns:
+          Object set at coordinate on map including None if the object at that
+          coordinate has not been defined.
+
+        Raises:
+          AssertionError if you try to get a value which is outside the
+            dimensions of the map.
+        """
+        assert y >= 0 and y < self.height
+        assert x >= 0 and x < self.width
+        return self.game_map[y][x]
     
-    def PrintDebug(self):
+    def DebugInfo(self):
         """Debug method to visualize current state of game board."""
         output_rows = []
         for h in range(self.height):
@@ -70,26 +107,10 @@ class GameMap(object):
                 else:
                     curr_row.append("#")
             output_rows.append("".join(curr_row))
-        print "-" * (self.width + 2)
-        for r in output_rows:
+        return output_rows
+
+    def PrintDebugOutput(self, height, width, debug_output):
+        print "-" * (width + 2)
+        for r in debug_output:
             print "|%s|" % r
         print "-" * (self.width + 2)
-
-
-def main():
-    gm = GameMap()
-    gm.width = 10
-    gm.height = 8
-    gm.Initialize()
-    gm.SetRoom(0, 0, "A")
-    gm.SetRoom(1, 0, "B")
-    gm.SetRoom(0, 1, "C")
-    gm.SetRoom(1, 1, " ")
-    gm.SetRoom(4, 4, " ")
-    gm.SetRoom(5, 4, " ")
-    gm.SetRoom(4, 5, " ")
-    gm.PrintDebug()
-
-
-if __name__ == "__main__":
-    main()
