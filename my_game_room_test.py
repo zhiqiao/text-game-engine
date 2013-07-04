@@ -54,6 +54,9 @@ class TestRoom(unittest.TestCase):
         self.assertEqual(self.game_room.contents, ["B"])
         self.game_room.AddContent("A")
         self.assertEqual(self.game_room.contents, ["A", "B"])
+        self.assertEqual(self.game_room.RemoveContent("A"), "A")
+        self.assertEqual(self.game_room.RemoveContent("B"), "B")
+        self.assertEqual(self.game_room.RemoveContent("B"), None)
 
     def test_display_content(self):
         self.game_room.state = 0

@@ -1,10 +1,51 @@
+import copy
+
 class ItemMapper(object):
     """Class to maintain all possible game items.
 
     This class, when instantiated, acts like a datastore mapping between a game
     item name and a copy of that game item.
     """
-    pass
+
+    def __init__(self):
+        # A default no-op item.
+        self._default_item = GameItem()
+        self._all_items = {}
+
+    @property
+    def all_items(self):
+        return self._all_items
+
+    @property
+    def default_item(self):
+        return self._default_item
+
+    @default_item.setter
+    def default_item(self, i):
+        self._default_item = i
+
+    def AddItem(self, name, item):
+        """Add or potentially override an existing entry with a copy of item.
+
+        Args:
+          name:  String name of item.
+          item:  A GameItem object.
+        """
+        self._all_items[name] = copy.deepcopy(item)
+
+    def GetItem(self, name):
+        """Returns the named item.
+
+        Caller takes control of the returned object.
+
+        Args:
+          name:  Name of item to get.
+        
+        Returns:
+          A copy of the stored item if found.  Otherwise, returns the default
+          item.
+        """
+        return copy.deepcopy(self._all_items.get(name, self._default_item))
 
 
 class GameItem(object):
