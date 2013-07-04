@@ -1,0 +1,149 @@
+[GAME]
+# Each config line is ended by a newline (\n) character.
+# '#' Is a comment.  Anything which appears on a line after '#' is ignored.
+# ':' is special character to differentiate items on a line.
+name:ISS Fire
+
+# 'exposition' is story background.  You can order the lines to be presented with
+# 'expositionN' where N is the line number.  This will be replayed in order.
+# Duplicate line numbers will be discarded.
+exposition1:Welcome SpaceX resupply robot to the International Space Station!
+exposition2:Unfortunatley, there is a fire on the station.
+exposition3:All the astronauts have evacuated; the station is abandond.
+exposition4:I can help you save the station.
+exposition5:But you need to move around and put out the fires.
+
+height:15
+width:30
+player_start:0:14  # Starting location is defined as Y-coordinate:X-coordinate
+player_inventory_capacity:10
+# A colon-separated list of items in the player's posession at the start.
+player_starting_inventory:foam:foam:foam:co2:co2
+
+# These 
+room_name:section
+up:bow
+down:stern
+
+
+[ROOM_STATES]
+# Each room state is described by an ID, then a colon-separated series of
+# adjectives.
+0:fine
+1:electical fire 
+2:fabric fire
+3:electical fire:fabric fire
+
+[ITEMS]
+# Each item is represented by it's name, and a colon-separate list of values of
+# what state transitions it is able to effect as a series of N>M values where
+# N is the current state, M is the end state.
+foam:2>1:1>0
+co2:3>1:2>0
+
+[MAP]
+# The map is defined as a series of rooms which exist in the height-by-width
+# grid.  Each entry is of the form:
+#   <Y-coordinate>:<X-coordinate>:<initial state>:<items>
+# where <items> is a colon-separated list of items.
+# All unspecified coordinates will be inaccessible parts of the map.  There are
+# no checks to see if the rooms are contiguous.
+# This map:
+  0123456789
+ +----------+
+0|    00    |
+1|  003300  |
+2|    12    |
+3|    0     |
+4| 03321 0  |
+5|00  010000|
+6|     0    |
+7|    33    |
+8|    0     |
+9|    10    |
+ +----------+
+
+0:4:0:h20:co2:co2:co2
+0:5:0:h20:h20:h20
+1:2:0:
+1:3:0:
+1:4:3:
+1:5:3:
+1:6:0:
+1:7:0:h20:h20:h20:h20:co2:co2:co2:co2:co2
+2:4:1:
+2:5:2:
+3:4:0:
+4:1:0:h20:h20:h20:h20:co2:co2:co2:co2:co2
+4:2:3:
+4:3:3:
+4:4:2:
+4:5:1:
+4:7:0:h20:h20:h20:h20:h20:co2:co2:co2:co2:co2:co2:co2
+5:0:0:h20:h20:h20:h20:h20:co2:co2:co2:co2:co2:co2:co2
+5:1:0:
+5:4:0:
+5:5:1:
+5:6:0:
+5:7:0:
+5:8:0:
+5:9:0:
+6:5:0:
+7:4:3:
+7:5:3:
+8:4:0:
+9:4:1:
+9:5:0:
+
+[ALIASES_MOVE]
+go
+move
+run
+jump
+
+[ALIASES_UP]
+up
+forward
+north
+bow
+
+[ALIASES_DOWN]
+stern
+south
+down
+back
+
+[ALIASES_LEFT]
+port
+left
+counter-clockwise
+counter clockwise
+
+[ALIASES_RIGHT]
+right
+starboard
+clockwise
+
+[ALIASES_USE]
+use
+try
+
+[ALIASES_ADD]
+pick up
+add
+grab
+store
+hoard
+
+[ALIASES_DROP]
+drop
+discard
+throw away
+
+[ALIASES_INSPECT]
+look at
+look
+inspect
+examine
+what is going on
+wtf

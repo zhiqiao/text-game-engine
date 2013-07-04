@@ -97,14 +97,21 @@ class GameMap(object):
             return None
         return self.game_map[y][x]
     
-    def DebugInfo(self):
-        """Debug method to visualize current state of game board."""
+    def DebugInfo(self, y_player=None, x_player=None):
+        """Debug method to visualize game board."""
         output_rows = []
         for h in range(self.height):
             curr_row = []
             for w in range(self.width):
+                    
                 if self.game_map[h][w] is not None:
-                    curr_row.append(str(self.game_map[h][w]))
+                    if (y_player is not None
+                        and x_player is not None
+                        and h = y_player
+                        and x = x_player):
+                        curr_row.append("P")
+                    else:
+                        curr_row.append(" ")
                 else:
                     curr_row.append("#")
             output_rows.append("".join(curr_row))

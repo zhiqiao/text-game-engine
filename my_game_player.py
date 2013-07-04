@@ -206,11 +206,15 @@ class Player(object):
         new_state = item_obj.UseItem(self._curr_room.state)
         return self._curr_room.TryChangeState(new_state)
 
-    def InspectRoom(self):
+    def GetRoomDisplay(self):
         """Return readable details of the current room."""
         # You can't inspect the room if you are in an invalid state, but by then
         # Start() could not have been called.
         return self._room_state_mapper.GetState(self._curr_room.state)
+
+    def GetRoomContentsDisplay(self):
+        """Return readable contents of the current room."""
+        return my_game_utils.GetContentsDisplay(self._curr_room.contents)
 
     def GetInventoryDisplay(self):
         """Return readable details of current inventory."""
@@ -218,6 +222,7 @@ class Player(object):
 
     def Inspect(self):
         """Return readable details of current inventory and room as a dict."""
-        return {"room": self.InspectRoom(),
+        return {"room": self.GetRoomDisplay(),
+                "room_contents": self.GetRoomContentsDisplay(),
                 "inventory": self.GetInventoryDisplay()
                }
