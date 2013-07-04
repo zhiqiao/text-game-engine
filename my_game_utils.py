@@ -1,4 +1,3 @@
-
 def RemoveContent(content_list, content_name):
     """Remove first instance of content object from the given list.
 

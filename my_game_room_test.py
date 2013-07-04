@@ -102,10 +102,6 @@ class TestRoom(unittest.TestCase):
         self.assertEqual(self.game_room.state, 1)
 
 
-class TestRoomState(unittest.TestCase):
-    pass
-
-
 class TestRoomStateMapper(unittest.TestCase):
 
     def setUp(self):

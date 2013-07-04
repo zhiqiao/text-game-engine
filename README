@@ -6,6 +6,9 @@ Requirements:
 To play:
   python game.py [optional config file]
 
+(Easiest way) to test code:
+  for f in $(ls *_test.py); do python $f; done
+
 General notes below...
 
 ================
@@ -62,11 +65,11 @@ Design Decisions:
     (3) No fire, no power
     (4) Fire, no power
   The reasoning for this was to create as much flexibility as possible for the
-  configuration of the game.  Each room can be marked with an initial game state
-  (or be chosen randomly).  Each object a player can use to interact with a room
-  can be implemented as a map between possible states, e.g. from above, a "Fire
-  Extinguisher" can transition a room from state 2 to state 1 and from state 4
-  to state 1, but has no effect on states 1 and 3.
+  configuration of the game.  Each room is marked with an initial game state.
+  Each object a player can use to interact with a room can be implemented as a
+  map between possible states, e.g. from above, a "Fire Extinguisher" can
+  transition a room from state 2 to state 1 and from state 4 to state 1, but has
+  no effect on states 1 and 3.
 
 - Return Types:
   None:  Return None to signal an invalid state or return value, e.g. something

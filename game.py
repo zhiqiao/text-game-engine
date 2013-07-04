@@ -1,3 +1,10 @@
+"""Main file for this text-based game.
+
+To run:
+  python game.py [optional config file]
+
+For in-game help, use 'help', 'exit' to quit.
+"""
 import sys
 
 import my_game_parser

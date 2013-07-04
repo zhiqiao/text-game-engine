@@ -1,31 +1,4 @@
-# Specific imports
 import my_game_utils
-
-class RoomState(object):
-    """Object to abstract out concept of a room's state."""
-
-    def __init__(self):
-        self._sid = None
-        self._desc = None
-
-    @property
-    def sid(self):
-        return self._sid
-
-    @sid.setter
-    def sid(self, i):
-        self._sid = i
-
-    @property
-    def desc(self):
-        return self._desc
-
-    @desc.setter
-    def desc(self, d):
-        self._desc = d
-
-    def __str__(self):
-        return str(self.sid)
 
 
 class RoomStateMapper(object):
