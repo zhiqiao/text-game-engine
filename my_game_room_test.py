@@ -89,6 +89,15 @@ class TestGameRoom(unittest.TestCase):
         self.assertEqual(self.game_room.DebugInfo(),
                          ["STATE: 0", "CONTENTS: []"])
 
+    def test_change_state(self):
+        self.game_room.state = 0
+
+        self.assertTrue(self.game_room.TryChangeState(1))
+        self.assertEqual(self.game_room.state, 1)
+
+        self.assertFalse(self.game_room.TryChangeState(1))
+        self.assertEqual(self.game_room.state, 1)
+
 
 class TestRoomState(unittest.TestCase):
     pass

@@ -12,13 +12,13 @@ Complex Objects
 - List:
   GameMap
   GameRoom
-  RoomStateMapper
+  GameObject
   
 Simple Objects
 - Must implement __str__
 - List:
-  GameObject
   RoomState
+  RoomStateMapper
 
 
 Design Decisions:

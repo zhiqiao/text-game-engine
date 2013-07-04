@@ -73,3 +73,12 @@ class GameObject(object):
         if curr_state in self._state_changes:
             return self._state_changes[curr_state]
         return curr_state
+
+    def DebugInfo(self):
+        output = []
+        for old_state, new_state in self._state_changes.iteritems():
+            output.append("change %d to %d" % (old_state, new_state))
+        return ["%s can:" % self._name] + sorted(output) + [
+            "reusable: %s" % ("yes" if self._reusable else "no")]
+                  
+        

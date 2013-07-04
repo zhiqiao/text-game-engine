@@ -144,6 +144,12 @@ class GameRoom(object):
             output.append("%dx%s" % (count, c))
         return output
 
+    def TryChangeState(self, new_state):
+        if new_state == self._state:
+            return False
+        self._state = new_state
+        return True
+
     def __str__(self):
         return self.state.sid
 
