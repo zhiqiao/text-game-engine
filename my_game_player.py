@@ -10,7 +10,6 @@ class Player(object):
     """
 
     def __init__(self):
-        self._action_aliases = {}
         self._curr_room = None
         self._y_pos = None
         self._x_pos = None
