@@ -61,7 +61,7 @@ class RoomStateMapper(object):
         return self._all_states.get(sid, None)
 
 
-class GameRoom(object):
+class Room(object):
     """Object to abstract out concept of a room in the game."""
     
     def __init__(self):

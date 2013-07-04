@@ -5,10 +5,10 @@ import unittest
 import my_game_room
 
 
-class TestGameRoom(unittest.TestCase):
+class TestRoom(unittest.TestCase):
 
     def setUp(self):
-        self.game_room = my_game_room.GameRoom()
+        self.game_room = my_game_room.Room()
 
     def test_state(self):
         self.game_room.state = 0
