@@ -37,7 +37,7 @@ class TestGameMap(unittest.TestCase):
             self.game_map.width = -1
 
     def test_initialize(self):
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(my_game_map.GameMapError):
             self.game_map.Initialize()
         self.game_map.height = 10
         self.game_map.width = 10
@@ -51,13 +51,13 @@ class TestGameMap(unittest.TestCase):
         self.game_map.width = 8
         self.game_map.Initialize()
 
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(my_game_map.GameMapError):
             self.game_map.SetRoom(-1, 0, "Test")
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(my_game_map.GameMapError):
             self.game_map.SetRoom(0, -1, "Test")
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(my_game_map.GameMapError):
             self.game_map.SetRoom(10, 0, "Test")
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(my_game_map.GameMapError):
             self.game_map.SetRoom(0, 10, "Test")
 
         self.assertEqual(self.game_map.SetRoom(0, 0, "T"), "T")
@@ -69,6 +69,10 @@ class TestGameMap(unittest.TestCase):
         self.assertEqual(self.game_map.GetRoom(9, 7), "T")
         self.assertEqual(self.game_map.GetRoom(9, 1), None)
         self.assertEqual(self.game_map.GetRoom(5, 5), None)
+        self.assertEqual(self.game_map.GetRoom(-1, 0), None)
+        self.assertEqual(self.game_map.GetRoom(0, -1), None)
+        self.assertEqual(self.game_map.GetRoom(10, 0), None)
+        self.assertEqual(self.game_map.GetRoom(0, 10), None)
 
         output = self.game_map.DebugInfo()
         self.assertEqual(output[0], "T######E")

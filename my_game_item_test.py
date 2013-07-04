@@ -2,13 +2,13 @@
 import unittest
 
 # Game specific imports.
-import my_game_object
+import my_game_item
 
 
-class TestGameObject(unittest.TestCase):
+class TestGameItem(unittest.TestCase):
 
     def setUp(self):
-        self.game_obj = my_game_object.GameObject()
+        self.game_obj = my_game_item.GameItem()
         self.game_obj.name = "hammer"
         self.game_obj.reusable = True
         self.game_obj.AddStateChange(1, 0)
@@ -31,10 +31,10 @@ class TestGameObject(unittest.TestCase):
                           "reusable: no"])
 
     def test_usage(self):
-        self.assertEqual(self.game_obj.UseObject(1), 0)
-        self.assertEqual(self.game_obj.UseObject(2), 0)
-        self.assertEqual(self.game_obj.UseObject(3), 1)
-        self.assertEqual(self.game_obj.UseObject(4), 4)
+        self.assertEqual(self.game_obj.UseItem(1), 0)
+        self.assertEqual(self.game_obj.UseItem(2), 0)
+        self.assertEqual(self.game_obj.UseItem(3), 1)
+        self.assertEqual(self.game_obj.UseItem(4), 4)
 
 
 if __name__ == '__main__':

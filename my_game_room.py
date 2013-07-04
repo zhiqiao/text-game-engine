@@ -1,3 +1,6 @@
+# Specific imports
+import my_game_utils
+
 class RoomState(object):
     """Object to abstract out concept of a room's state."""
 
@@ -85,64 +88,28 @@ class Room(object):
     def contents(self):
         return self._contents
 
-    def AddContent(self, c):
+    def AddContent(self, item):
         """Add content to this room.
 
-        Takes ownership of the object.
+        Takes ownership of the item.
 
         Args:
-          c:  Name of an object to put into the room.
+          item:  Name of an item to put into the room.
 
         Raises:
           Attribute error if sort_id is undefined.
         """
-        self._contents.append(c)
+        self._contents.append(item)
         self._contents.sort()
 
     def RemoveContent(self, content_name):
-        """Remove content object from the room.
-
-        Args:
-          content_name: Name of the object to be removed from the room.
-
-        Returns:
-          The object if found, None otherwise.
-        """
-        for i, c in enumerate(self._contents):
-            if c == content_name:
-                break
-        if i == len(self._contents)-1 and c != content_name:
-            return None
-        # Removing an object from a sorted list should still preserve the sorted
+        # Removing an item from a sorted list should still preserve the sorted
         # order of the list.
-        return self._contents.pop(i)
+        return my_game_utils.RemoveContent(self._contents, content_name)
 
     def GetContentsDisplay(self):
-        """Get the contents of the room to display.
-
-        Returns:
-           A list of strings of the form "NxNAME" where N is the number of that
-           object in the room.  [] if there are no objects in the room.
-        """
-        output = []
-        curr = None
-        count = 0
-        # The reason for this algorithm for counting objects, with assuming they
-        # are sorted, as opposed to using a dict, is because the results should
-        # be sorted by name of object, which would be difficult to do after
-        # flattening a dict.
-        for c in self.contents:
-            if curr is None:
-                curr = c
-            if c != curr:
-                output.append("%dx%s" % (count, curr))
-                curr = c
-                count = 1
-            else:
-                count += 1
-        if count:
-            output.append("%dx%s" % (count, c))
-        return output
+        """Get the contents of the room to display."""
+        return my_game_utils.GetContentsDisplay(self._contents)
 
     def TryChangeState(self, new_state):
         if new_state == self._state:

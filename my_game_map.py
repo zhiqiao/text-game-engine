@@ -1,3 +1,6 @@
+class GameMapError(Exception):
+    pass
+
 class GameMap(object):
     """Object representing game map state.
 
@@ -45,36 +48,37 @@ class GameMap(object):
         """Initialize an empty game map with the current dimensions.
 
         Raises:
-          AssertionError if the dimensions have not been set.
+          GameMapError if the dimensions have not been set.
         """
-        assert self.height and self.width
+        if not self.height or not self.width:
+            raise GameMapError("Map is not set")
         self._game_map = []
         for h in range(self.height):
             self.game_map.append([None] * self.width)
 
-    def SetRoom(self, y, x, contents):
-        """Define the contents of a room.
+    def SetRoom(self, y, x, room):
+        """Define the room at a given coordinate.
 
-        Contents to place at the coordinate must at least implement the
+        Room to place at the coordinate must at least implement the
         following:
           __str__
 
         Args:
           y:  Y-coordinate of the room to set.
           x:  X-coordinate of the room to set.
-          contents:  Object to place at (y, x).  Should be of type
+          room:  Object to place at (y, x).  Should be of type
             my_game_room.GameRoom.
 
         Returns:
           Object set at coordinate on map.
 
         Raises:
-          AssertionError if you try to set a value which is outside the
+          GameMapError if you try to set a value which is outside the
             dimensions of the map.
         """
-        assert y >= 0 and y < self.height
-        assert x >= 0 and x < self.width
-        self.game_map[y][x] = contents
+        if y < 0 or y >= self.height or x < 0 or x >= self.width:
+            raise GameMapError("Invalid space (%d, %d)", y, x)
+        self.game_map[y][x] = room
         return self.game_map[y][x]
 
     def GetRoom(self, y, x):
@@ -86,14 +90,11 @@ class GameMap(object):
 
         Returns:
           Object set at coordinate on map including None if the object at that
-          coordinate has not been defined.
-
-        Raises:
-          AssertionError if you try to get a value which is outside the
-            dimensions of the map.
+          coordinate has not been defined or if the request position is out of
+          bounds.
         """
-        assert y >= 0 and y < self.height
-        assert x >= 0 and x < self.width
+        if y < 0 or y >= self.height or x < 0 or x >= self.width:
+            return None
         return self.game_map[y][x]
     
     def DebugInfo(self):

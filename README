@@ -1,7 +1,10 @@
 This is a game engine for the purpose of playing text-based games.
 
 Supported Verb Types:
-  Move [on the map]
+  Move [up the map]
+  Move [down the map]
+  Move [left the map]
+  Move [right the map]
   Use [object]
   Add [object]
   Drop [object]
@@ -45,6 +48,10 @@ Design Decisions:
   e.g. from above, a "Fire Extinguisher" can transition a room from state 2 to
   state 1 and from state 4 to state 1, but has no effect on states 1 and 3.
 
+- Return Types:
+  None:  Return None when something expected did not happen.
+  Boolean:  Return boolean if some expected result happened or did not happen.
+
 - Logging
   Log all output.
 
@@ -53,3 +60,28 @@ Design Decisions:
   should all result in non-recoverable exceptions.
   Game play which results in exceptions or error states should be logged as
   such, but as much as possible, the game should not crash.
+
+
+Objects:
+  Map:
+  - Enforce movement
+  - Store state of every room
+
+  Player:
+  - Contains object inventory
+  - Stores position
+  - Changes position
+  - Users objects
+
+  Room:
+  - Key by coordinate
+  - Contains objects
+  - Contains game state
+
+  Room State:
+  - Key by ID
+  - Has description
+
+  Object:
+  - Key by name
+  - Abilities

@@ -1,18 +1,18 @@
-class ObjectMapper(object):
-    """Class to maintain all possible game objects.
+class ItemMapper(object):
+    """Class to maintain all possible game items.
 
     This class, when instantiated, acts like a datastore mapping between a game
-    object name and a copy of that game object.
+    item name and a copy of that game item.
     """
     pass
 
 
-class GameObject(object):
-    """A game object.
+class GameItem(object):
+    """A game item.
 
-    A game object is modelled as something which allows the player to change
+    A game item is modelled as something which allows the player to change
     the state of a room s/he is in.  The possible room state changes are stored
-    in a dict.  If the state of the room where the object is being used does not
+    in a dict.  If the state of the room where the item is being used does not
     have an entry in this dict, there is no effect and the state remains
     unchanged.
     """
@@ -57,10 +57,10 @@ class GameObject(object):
     def __str__(self):
         return self._name
 
-    def UseObject(self, curr_state):
-        """Attempt to use this object affect the given state.
+    def UseItem(self, curr_state):
+        """Attempt to use this item affect the given state.
 
-        Check to see if the curr_state is included in this object's possible
+        Check to see if the curr_state is included in this item's possible
         state_changes.
 
         Args:
