@@ -66,6 +66,8 @@ class TestPlayer(unittest.TestCase):
         self.player.game_map = game_map
         self.player.y_pos = 0
         self.player.x_pos = 0
+        self.player.item_mapper = my_game_item.ItemMapper()
+        self.player.room_state_mapper = my_game_room.RoomStateMapper()
         self.assertTrue(self.player.Start())
         self.assertEqual(str(self.player.curr_room), "1")
         self.assertFalse(self.player.MoveUp())     # (0, 0)
@@ -103,6 +105,8 @@ class TestPlayer(unittest.TestCase):
         self.player.game_map = game_map
         self.player.y_pos = 0
         self.player.x_pos = 0
+        self.player.item_mapper = my_game_item.ItemMapper()
+        self.player.room_state_mapper = my_game_room.RoomStateMapper()
         self.assertTrue(self.player.Start())
 
     def test_invalid_map(self):
@@ -247,6 +251,25 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player.inventory, ["A", "B", "C"])
         self.assertEqual(self.player.curr_room.state, 0)
 
+    def test_inspect(self):
+        state_mapper = my_game_room.RoomStateMapper()
+        state_mapper.AddState(1, ["cold", "wet", "calm"])
+        self.player.room_state_mapper = state_mapper
+        self.player.curr_room = my_game_room.Room()
+        self.assertEqual(self.player.Inspect(), {"room": [], "inventory": []})
+        self.player.curr_room.state = 1
+        self.assertEqual(self.player.Inspect(),
+                         {"room": ["cold", "wet", "calm"], "inventory": []})
+        self.player.max_inventory_size = 5
+        self.player.AddItem("A")
+        self.player.AddItem("B")
+        self.player.AddItem("A")
+        self.player.AddItem("C")
+        self.player.AddItem("A")
+        self.assertEqual(self.player.Inspect(),
+                         {'room': ['cold', 'wet', 'calm'],
+                          'inventory': ['3xA', '1xB', '1xC']
+                         })
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

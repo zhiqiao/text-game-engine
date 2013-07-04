@@ -32,22 +32,31 @@ class RoomStateMapper(object):
     """Class to maintain all configured room states.
 
     This class, when instantiated, acts like a datastore mapping between a state
-    ID and a description of a room.
+    ID and a description of a room, which is a list of adjectives.
     """
 
     def __init__(self):
+        self._default_state = []
         self._all_states = {}
 
     @property
     def all_states(self):
         return self._all_states
 
+    @property
+    def default_state(self):
+        return self._default_state
+
+    @default_state.setter
+    def default_state(self, s):
+        self._default_state = s
+
     def AddState(self, sid, desc):
         """Add or potentially override an existing room state description.
 
         Args:
           sid:  Integer room state ID.
-          desc:  String description.
+          desc:  List of string descriptions.
         """
         self._all_states[sid] = desc
 
@@ -58,10 +67,10 @@ class RoomStateMapper(object):
           sid:  Integer room state ID.
         
         Returns:
-          A string description of the room state, None if the ID does not exist
-          in the mapping.
+          A list of string descriptions of the room state, the default state if
+          the ID does not exist in the mapping.
         """
-        return self._all_states.get(sid, None)
+        return self._all_states.get(sid, self._default_state)
 
 
 class Room(object):

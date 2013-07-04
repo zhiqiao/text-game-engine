@@ -94,17 +94,23 @@ class Player(object):
     def Start(self):
         """Check the player is on a valid game map and a valid room.
 
+        Must be called before starting the game.
+
         Returns:
           True iff the player has:
           - a valid game map AND
           - an Y-coordinate AND
           - an X-coordinate AND
-          - (Y, X) is a valid room in the map.
+          - (Y, X) is a valid room in the map AND
+          - a valid item mapper is attached AND
+          - a valid state mapper is attached
           False otherwise
         """
         if self._game_map:
             self._curr_room = self._game_map.GetRoom(self._y_pos, self._x_pos)
-            if self._curr_room is not None:
+            if (self._curr_room is not None
+                and self._room_state_mapper
+                and self._item_mapper):
                 return True
         return False
         
@@ -202,12 +208,16 @@ class Player(object):
 
     def InspectRoom(self):
         """Return readable details of the current room."""
-        return self._room_state_mapper.GetRoomDisplay(self._curr_room.state)
+        # You can't inspect the room if you are in an invalid state, but by then
+        # Start() could not have been called.
+        return self._room_state_mapper.GetState(self._curr_room.state)
 
     def GetInventoryDisplay(self):
         """Return readable details of current inventory."""
         return my_game_utils.GetContentsDisplay(self._inventory)
 
     def Inspect(self):
-        """Return readable display details of current inventory and room."""
-        return self.InspectRoom() + self.GetInventoryDisplay()
+        """Return readable details of current inventory and room as a dict."""
+        return {"room": self.InspectRoom(),
+                "inventory": self.GetInventoryDisplay()
+               }
