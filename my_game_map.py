@@ -100,15 +100,14 @@ class GameMap(object):
     def DebugInfo(self, y_player=None, x_player=None):
         """Debug method to visualize game board."""
         output_rows = []
-        for h in range(self.height):
+        for y in range(self.height):
             curr_row = []
-            for w in range(self.width):
-                    
-                if self.game_map[h][w] is not None:
+            for x in range(self.width):
+                if self.game_map[y][x] is not None:
                     if (y_player is not None
                         and x_player is not None
-                        and h = y_player
-                        and x = x_player):
+                        and y == y_player
+                        and x == x_player):
                         curr_row.append("P")
                     else:
                         curr_row.append(" ")
@@ -117,8 +116,8 @@ class GameMap(object):
             output_rows.append("".join(curr_row))
         return output_rows
 
-    def PrintDebugOutput(self, height, width, debug_output):
-        print "-" * (width + 2)
-        for r in debug_output:
+    def PrintDebugOutput(self, y_player=None, x_player=None):
+        print "+%s+" % ("-" * self.width)
+        for r in self.DebugInfo(y_player=y_player, x_player=x_player):
             print "|%s|" % r
-        print "-" * (self.width + 2)
+        print "+%s+" % ("-" * self.width)

@@ -75,9 +75,10 @@ class TestGameMap(unittest.TestCase):
         self.assertEqual(self.game_map.GetRoom(0, 10), None)
 
         output = self.game_map.DebugInfo()
-        self.assertEqual(output[0], "T######E")
-        self.assertEqual(output[9], "S######T")
+        print output
+        self.assertEqual(output[0], " ###### ")
+        self.assertEqual(output[9], " ###### ")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

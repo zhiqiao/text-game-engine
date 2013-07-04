@@ -15,10 +15,6 @@ class TestPlayer(unittest.TestCase):
         self.player.name = "test"
         self.assertEqual(self.player.name, "test")
 
-        self.assertEqual(self.player.game_map, None)
-        self.player.game_map = [[None]]
-        self.assertEqual(self.player.game_map, [[None]])
-
         self.assertEqual(self.player.curr_room, None)
         self.player.curr_room = my_game_room.Room()
         self.assertNotEqual(self.player.curr_room, None)
@@ -39,12 +35,10 @@ class TestPlayer(unittest.TestCase):
         self.player.max_inventory_size = 10
         self.assertEqual(self.player.max_inventory_size, 10)
 
-        self.assertEqual(self.player.room_state_mapper, None)
-        self.player.room_state_mapper = my_game_room.RoomStateMapper()
+        # These three objects are associated to the player and thus instantiated
+        # in init()
+        self.assertNotEqual(self.player.game_map, None)
         self.assertNotEqual(self.player.room_state_mapper, None)
-
-        self.assertEqual(self.player.item_mapper, None)
-        self.player.item_mapper = my_game_item.ItemMapper()
         self.assertNotEqual(self.player.item_mapper, None)
 
     def test_movement(self):
@@ -256,20 +250,25 @@ class TestPlayer(unittest.TestCase):
         state_mapper.AddState(1, ["cold", "wet", "calm"])
         self.player.room_state_mapper = state_mapper
         self.player.curr_room = my_game_room.Room()
-        self.assertEqual(self.player.Inspect(), {"room": [], "inventory": []})
+        self.assertEqual(self.player.Inspect(),
+                         {"room": [], "inventory": [], "room_contents": []})
         self.player.curr_room.state = 1
         self.assertEqual(self.player.Inspect(),
-                         {"room": ["cold", "wet", "calm"], "inventory": []})
+                         {"room": ["cold", "wet", "calm"],
+                          "inventory": [],
+                          "room_contents": []})
         self.player.max_inventory_size = 5
         self.player.AddItem("A")
         self.player.AddItem("B")
         self.player.AddItem("A")
         self.player.AddItem("C")
         self.player.AddItem("A")
+        self.player.curr_room.AddContent("B")
+        self.player.curr_room.AddContent("B")
         self.assertEqual(self.player.Inspect(),
-                         {'room': ['cold', 'wet', 'calm'],
-                          'inventory': ['3xA', '1xB', '1xC']
-                         })
+                         {"room": ["cold", "wet", "calm"],
+                          "inventory": ["3xA", "1xB", "1xC"],
+                          "room_contents": ["2xB"]})
 
 if __name__ == "__main__":
     unittest.main()

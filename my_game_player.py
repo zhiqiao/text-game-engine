@@ -1,4 +1,6 @@
-# Specific imports
+import my_game_item
+import my_game_map
+import my_game_room
 import my_game_utils
 
 class Player(object):
@@ -8,16 +10,18 @@ class Player(object):
     """
 
     def __init__(self):
+        self._action_aliases = {}
         self._name = None
-        self._game_map = None
         self._curr_room = None
         self._y_pos = None
         self._x_pos = None
         # Inventory is sorted.
         self._inventory = []
         self._max_inventory_size = 0
-        self._room_state_mapper = None
-        self._item_mapper = None
+        # Objects tied to the player.
+        self._game_map = my_game_map.GameMap()
+        self._room_state_mapper = my_game_room.RoomStateMapper()
+        self._item_mapper = my_game_item.ItemMapper()
 
     @property
     def name(self):
