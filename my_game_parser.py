@@ -1,3 +1,4 @@
+import functools
 import re
 
 import my_game_interface
@@ -12,7 +13,11 @@ class ParseError(Exception):
 
 
 class GameParser(object):
-    """Parser for the game configuration."""
+    """Parser for the game configuration.
+
+    After this class finishes parsing the config file, a my_game_player.Player
+    and a my_game_interface.GameInterface will be ready to start the game.
+    """
 
     SECTION_RE = re.compile(r"^\[([A-Z_]+)\]$")
 
@@ -21,7 +26,6 @@ class GameParser(object):
         self._section_lines = []  # A list of lines in the current [SECTION]
         self._game_interface = my_game_interface.GameInterface()
         self._player = my_game_player.Player()
-        self._player.game_map = my_game_map.GameMap()
 
     @property
     def curr_section(self):
@@ -57,6 +61,8 @@ class GameParser(object):
         with open(filename, "r") as f:
             for line in f:
                 self.ParseLine(line)
+            # Parse last section.
+            self.ParseSection(self._curr_section)
 
     def ParseGameLine(self, line_parts):
         """Parse a line from the [GAME] section of the config.
@@ -68,6 +74,7 @@ class GameParser(object):
           ParseError if the key of the config line is not one of:
             name
             exposition
+            help
             player_inventory
             player_inventory_capacity
             noun_room
@@ -81,9 +88,14 @@ class GameParser(object):
             self._game_interface.name = line_parts[1]
         elif key == "exposition":
             self._game_interface.exposition = line_parts[1].strip()
+        elif key == "help":
+            self._game_interface.help = line_parts[1].strip()
         elif key == "player_inventory":
             for item in line_parts[1:]:
-                self._player.AddItem(item)
+                # We can't use Player.AddItem here because the player's current
+                # room hasn't been fully initialized.  We are not adding items
+                # from the room, but from the initial game state.
+                self._player.inventory.append(item)
         elif key == "player_inventory_capacity":
             self._player._max_inventory_size = int(line_parts[1])
         elif key == "noun_room":
@@ -216,21 +228,29 @@ class GameParser(object):
         if alias == "MOVE":
             self._game_interface.AddMoveAlias(key)
         elif alias == "UP":
-            self._game_interface.AddDirectionAlias(key, self._player.MoveUp)
+            self._game_interface.AddDirectionAlias(
+                key, my_game_player.Player.MoveUp)
         elif alias == "DOWN":
-            self._game_interface.AddDirectionAlias(key, self._player.MoveDown)
+            self._game_interface.AddDirectionAlias(
+                key, my_game_player.Player.MoveDown)
         elif alias == "LEFT":
-            self._game_interface.AddDirectionAlias(key, self._player.MoveLeft)
+            self._game_interface.AddDirectionAlias(
+                key, my_game_player.Player.MoveLeft)
         elif alias == "RIGHT":
-            self._game_interface.AddDirectionAlias(key, self._player.MoveRight)
+            self._game_interface.AddDirectionAlias(
+                key, my_game_player.Player.MoveRight)
         elif alias == "USE":
-            self._game_interface.AddActionAlias(key, self._player.UseItem)
+            self._game_interface.AddActionAlias(
+                key, my_game_player.Player.UseItem)
         elif alias == "ADD":
-            self._game_interface.AddActionAlias(key, self._player.AddItem)
+            self._game_interface.AddActionAlias(
+                key, my_game_player.Player.AddItem)
         elif alias == "DROP":
-            self._game_interface.AddActionAlias(key, self._player.DropItem)
+            self._game_interface.AddActionAlias(
+                key, my_game_player.Player.DropItem)
         elif alias == "INSPECT":
-            self._game_interface.AddActionAlias(key, self._player.Inspect)
+            self._game_interface.AddActionAlias(
+                key, my_game_player.Player.Inspect)
         else:
             raise ParseError("Unrecognized ALIASES section: %s", alias)
 

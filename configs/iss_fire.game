@@ -6,6 +6,8 @@ name:ISS Fire
 
 exposition:Welcome SpaceX Re-supply Robot to the International Space Station!  Unfortunatley, there is a fire on the station.  All the astronauts have evacuated; the station is abandond.  I can help you save the station, but you need to move around and put out the fires.
 
+help:I only understand a limited set of commands.  The flight manifest says you are capable of moving in the 4 cardinal directions, inspecting the situation, and picking up, putting down, and using items.  Maybe try some of those?
+
 # Capcity must come before inventory list.
 player_inventory_capacity:10
 # A colon-separated list of items in the player's posession at the start.
@@ -32,7 +34,7 @@ noun_right:starboard
 # what state transitions it is able to effect as a series of N>M values where
 # N is the current state, M is the end state.
 foam:2>1:1>0
-CO2:3>1:2>0
+co2:3>1:2>0
 
 [MAP]
 # The map is defined as a series of rooms which exist in the height-by-width
@@ -59,24 +61,24 @@ dimensions:10:10
 # Starting location is defined as Y-coordinate:X-coordinate
 player_start:0:4
 
-0:4:0:h20:co2:co2:co2
-0:5:0:h20:h20:h20
+0:4:0:foam:co2:co2:co2
+0:5:0:foam:foam:foam
 1:2:0:
 1:3:0:
 1:4:3:
 1:5:3:
 1:6:0:
-1:7:0:h20:h20:h20:h20:co2:co2:co2:co2:co2
+1:7:0:foam:foam:foam:foam:co2:co2:co2:co2:co2
 2:4:1:
 2:5:2:
 3:4:0:
-4:1:0:h20:h20:h20:h20:co2:co2:co2:co2:co2
+4:1:0:foam:foam:foam:foam:co2:co2:co2:co2:co2
 4:2:3:
 4:3:3:
 4:4:2:
 4:5:1:
-4:7:0:h20:h20:h20:h20:h20:co2:co2:co2:co2:co2:co2:co2
-5:0:0:h20:h20:h20:h20:h20:co2:co2:co2:co2:co2:co2:co2
+4:7:0:foam:foam:foam:foam:foam:co2:co2:co2:co2:co2:co2:co2
+5:0:0:foam:foam:foam:foam:foam:co2:co2:co2:co2:co2:co2:co2
 5:1:0:
 5:4:0:
 5:5:1:
@@ -128,6 +130,8 @@ add
 grab
 store
 hoard
+get
+take
 
 [ALIASES_DROP]
 drop

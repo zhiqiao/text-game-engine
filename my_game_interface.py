@@ -1,12 +1,17 @@
-import sys
-
+import functools
 
 class GameInterface(object):
+    """Command line interface for the game.
+
+    Main interaction between the player and the game.
+
+    NOTE: Much of this class is tested by the parser.
+    """
 
     EXIT_CMD = "exit"
-    
+    DEBUG_CMD = "debug"
+
     def __init__(self):
-        self._curr_command = None
         self._command_history = []
         self._action_aliases = {}
         self._move_aliases = []
@@ -29,6 +34,14 @@ class GameInterface(object):
     @exposition.setter
     def exposition(self, n):
         self._game_text["exposition"] = n
+
+    @property
+    def help(self):
+        return self._game_text.get("help", None)
+
+    @help.setter
+    def help(self, n):
+        self._game_text["help"] = n
 
     @property
     def noun_room(self):
@@ -106,6 +119,7 @@ class GameInterface(object):
     def DebugInfo(self):
         return ["GAME: %s" % self.name,
                 "EXPOSITION: %s" % self.exposition,
+                "HELP: %s" % self.help,
                 ("NOUNS: room=%(room)s,"
                  " up=%(up)s, down=%(down)s, left=%(left)s, right=%(right)s"
                  % {"room": self.noun_room,
@@ -143,24 +157,35 @@ class GameInterface(object):
                 return (self._action_aliases[a], arguments)
         return (None, None)
 
-    def GetInputCommand(self):
-        self._curr_command = raw_input("> ")
-        return self._curr_command != self.EXIT_CMD
+    def Run(self, player, debug_mode=False):
+        """Main method of interaction.
 
-    def Run(self):
-        while self.GetInputCommand():
-            self._command_history.append(self._curr_command)
+        This method takes as a parameter the primary game interaction element,
+        the player object.  It translates the user input commands and applies
+        them to the player object.
+
+        Args:
+          player:  A my_game_player.Player object.
+        """
+        player.Start()
+        print self.exposition
+        curr_command = None
+        while curr_command != self.EXIT_CMD:
+            if debug_mode:
+                player.PrintDebugOutput()
+            curr_command = raw_input("> ").strip(".,!? ").lower()
+            action, arguments = self.LookupAction(curr_command)
+            if action is not None:
+                if arguments:
+                    success, msg = action(player, arguments)
+                else:
+                    success, msg = action(player)
+                print msg
+            elif curr_command == "help":
+                print self.help
+            elif curr_command != self.EXIT_CMD:
+                print "I don't understand that.  Try 'help'."
+            self._command_history.append(curr_command)
         print "Goodbye!"
-        print self._command_history
-
-
-
-def main(argv):
-    game_interface = GameInterface()
-    game_interface.Run()
-
-
-if __name__ == '__main__':
-    main(sys.argv)
-            
-
+        if debug_mode:
+            print "\n".join(self._command_history)

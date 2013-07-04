@@ -75,7 +75,6 @@ class TestGameMap(unittest.TestCase):
         self.assertEqual(self.game_map.GetRoom(0, 10), None)
 
         output = self.game_map.DebugInfo()
-        print output
         self.assertEqual(output[0], " ###### ")
         self.assertEqual(output[9], " ###### ")
 

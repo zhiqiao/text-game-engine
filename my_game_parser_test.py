@@ -144,7 +144,7 @@ class TestGameParser(unittest.TestCase):
         self.assertNotEqual(game_interface.LookupAction("try baton")[0], None)
         self.assertEqual(game_interface.LookupAction("Grab big bat")[1],
                          "big bat")
-        self.assertNotEqual(game_interface.LookupAction("Inspect.")[0], "")
+        self.assertNotEqual(game_interface.LookupAction("Inspect.")[0], None)
         self.assertEqual(
             game_interface.LookupAction("drop Your glasses, now!")[1],
             "your glasses, now")
@@ -187,7 +187,7 @@ class FullTest(unittest.TestCase):
 
         self.assertNotEqual(game_interface.LookupAction("go left")[0], None)
         self.assertNotEqual(game_interface.LookupAction("USE baton")[0], None)
-        self.assertNotEqual(game_interface.LookupAction("Inspect.")[0], "")
+        self.assertNotEqual(game_interface.LookupAction("Inspect.")[0], None)
 
 
 if __name__ == "__main__":

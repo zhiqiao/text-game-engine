@@ -80,9 +80,6 @@ class Room(object):
         # A state class must implement a __str__ method for debugging.
         self._state = None
         # Contents are kept sorted.
-        # Every content class must implement a __str__ method for debugging.
-        # Every content class must implement an sort_id method to be able to
-        # order these objects.
         self._contents = []
     
     @property
@@ -96,6 +93,10 @@ class Room(object):
     @property
     def contents(self):
         return self._contents
+
+    @contents.setter
+    def contents(self, c):
+        self._contents = c
 
     def AddContent(self, item):
         """Add content to this room.
