@@ -12,15 +12,6 @@ help:I only understand a limited set of commands.  The flight manifest says you 
 player_inventory_capacity:10
 # A colon-separated list of items in the player's posession at the start.
 player_inventory:foam:foam:foam:co2:co2
-
-# These represent the game nouns.
-noun_room:section
-noun_up:bow
-noun_down:stern
-noun_left:port
-noun_right:starboard
-
-
 [ROOM_STATES]
 # Each room state is described by an ID, then a colon-separated series of
 # adjectives.

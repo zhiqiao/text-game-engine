@@ -12,13 +12,9 @@ class TestGameParser(unittest.TestCase):
         self._game_parser.section_lines = [
             "name:ISS Fire",
             "exposition: Test game.",
+            " help:help me ",
             "player_inventory_capacity:10",
             "player_inventory:foam:foam:foam:CO2:CO2",
-            "noun_room:section",
-            "noun_up:bow",
-            "noun_down:stern",
-            "noun_left:port",
-            "noun_right:starboard",
             ]
         self._game_parser.ParseSection("GAME")
         player = self._game_parser.player
@@ -27,8 +23,7 @@ class TestGameParser(unittest.TestCase):
             game_interface.DebugInfo(),
             ["GAME: ISS Fire",
              "EXPOSITION: Test game.",
-             ("NOUNS: room=section,"
-              " up=bow, down=stern, left=port, right=starboard")])
+             "HELP: help me"])
         self.assertEqual(player.max_inventory_size, 10)
         self.assertEqual(player.GetInventoryDisplay(), ["2xCO2", "3xfoam"])
 
@@ -172,13 +167,16 @@ class FullTest(unittest.TestCase):
               "  All the astronauts have evacuated; the station is abandond."
               "  I can help you save the station, but you need to move around"
               " and put out the fires."),
-             ("NOUNS: room=section,"
-              " up=bow, down=stern, left=port, right=starboard")])
+             ("HELP: I only understand a limited set of commands.  The flight"
+              " manifest says you are capable of moving in the 4 cardinal"
+              " directions, inspecting the situation, and picking up, putting"
+              " down, and using items.  Maybe try some of those?")])
+
         self.assertEqual(player.room_state_mapper.GetState(0), ["fine"])
         self.assertEqual(player.room_state_mapper.GetState(3),
                          ["electrical fire", "fabric fire"])
         self.assertEqual(player.item_mapper.GetItem("foam").UseItem(2), 1)
-        self.assertEqual(player.item_mapper.GetItem("CO2").UseItem(3), 1)
+        self.assertEqual(player.item_mapper.GetItem("co2").UseItem(3), 1)
 
         self.assertEqual(player.y_pos, 0)
         self.assertEqual(player.x_pos, 4)

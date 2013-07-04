@@ -77,11 +77,6 @@ class GameParser(object):
             help
             player_inventory
             player_inventory_capacity
-            noun_room
-            noun_up
-            noun_down
-            noun_left
-            noun_right
         """
         key = line_parts[0].strip().lower()
         if key == "name":
@@ -98,16 +93,6 @@ class GameParser(object):
                 self._player.inventory.append(item)
         elif key == "player_inventory_capacity":
             self._player._max_inventory_size = int(line_parts[1])
-        elif key == "noun_room":
-            self._game_interface.noun_room = line_parts[1]
-        elif key == "noun_up":
-            self._game_interface.noun_up = line_parts[1]
-        elif key == "noun_down":
-            self._game_interface.noun_down = line_parts[1]
-        elif key == "noun_left":
-            self._game_interface.noun_left = line_parts[1]
-        elif key == "noun_right":
-            self._game_interface.noun_right = line_parts[1]
         else:
             raise ParseError(
                 "Unrecognized line in [GAME] section: %s", line_parts)

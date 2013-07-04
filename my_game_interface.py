@@ -17,7 +17,6 @@ class GameInterface(object):
         self._move_aliases = []
         self._direction_aliases = {}
         self._game_text = {}
-        self._nouns = {}
 
     @property
     def name(self):
@@ -42,46 +41,6 @@ class GameInterface(object):
     @help.setter
     def help(self, n):
         self._game_text["help"] = n
-
-    @property
-    def noun_room(self):
-        return self._nouns.get("noun_room", None)
-
-    @noun_room.setter
-    def noun_room(self, n):
-        self._nouns["noun_room"] = n
-
-    @property
-    def noun_up(self):
-        return self._nouns.get("noun_up", None)
-
-    @noun_up.setter
-    def noun_up(self, n):
-        self._nouns["noun_up"] = n
-
-    @property
-    def noun_down(self):
-        return self._nouns.get("noun_down", None)
-
-    @noun_down.setter
-    def noun_down(self, n):
-        self._nouns["noun_down"] = n
-
-    @property
-    def noun_left(self):
-        return self._nouns.get("noun_left", None)
-
-    @noun_left.setter
-    def noun_left(self, n):
-        self._nouns["noun_left"] = n
-
-    @property
-    def noun_right(self):
-        return self._nouns.get("noun_right", None)
-
-    @noun_right.setter
-    def noun_right(self, n):
-        self._nouns["noun_right"] = n
 
     @property
     def command_history(self):
@@ -119,14 +78,7 @@ class GameInterface(object):
     def DebugInfo(self):
         return ["GAME: %s" % self.name,
                 "EXPOSITION: %s" % self.exposition,
-                "HELP: %s" % self.help,
-                ("NOUNS: room=%(room)s,"
-                 " up=%(up)s, down=%(down)s, left=%(left)s, right=%(right)s"
-                 % {"room": self.noun_room,
-                    "up": self.noun_up,
-                    "down": self.noun_down,
-                    "left": self.noun_left,
-                    "right": self.noun_right})]
+                "HELP: %s" % self.help]
 
     def LookupAction(self, command):
         """Look up the action to perform for the given command.
