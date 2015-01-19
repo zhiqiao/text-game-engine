@@ -1,4 +1,5 @@
 import functools
+import os
 
 class GameInterface(object):
     """Command line interface for the game.
@@ -120,6 +121,8 @@ class GameInterface(object):
           player:  A my_game_player.Player object.
         """
         player.Start()
+        os.system('cls')
+        os.system('clear')
         print self.exposition
         curr_command = None
         while curr_command != self.EXIT_CMD:
@@ -132,6 +135,8 @@ class GameInterface(object):
                     success, msg = action(player, arguments)
                 else:
                     success, msg = action(player)
+                os.system('cls')
+                os.system('clear')
                 print msg
             elif curr_command == "help":
                 print self.help
